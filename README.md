@@ -695,3 +695,15 @@ List unresolved limitations explicitly. Examples:
 - It does not commit, push, deploy, rotate keys, or restart production services without separate approval.
 
 Security work should reduce uncertainty without creating a new source of risk.
+
+---
+
+## 📄 License & Terms
+
+[![CC BY-NC 4.0](https://shields.io)](https://creativecommons.org)
+
+This repository is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org). 
+
+* **Attribution:** You are free to copy, distribute, and modify these AI prompts, provided you give appropriate credit to the original author.
+* **Non-Commercial:** You may **not** use these instructions or derivative prompts for commercial security services, paid AI tools, or monetized enterprise platforms without explicit permission.
+* **Disclaimer:** These prompts are diagnostic instructions for AI models. AI outputs can vary or hallucinate; execute at your own risk.
