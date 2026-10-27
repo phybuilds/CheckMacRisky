@@ -88,7 +88,7 @@ fi
 
 As of the review date:
 
-- Chrome for Mac should be **156.0.8078.48 or later**.
+- Chrome for Mac should be **156.0.8078.47 or later**.
 - Firefox Desktop should be **158.0.1 or later**.
 
 An installed but unused old browser is not an active network service, but it is still unsafe if opened.
@@ -698,12 +698,9 @@ Security work should reduce uncertainty without creating a new source of risk.
 
 ---
 
-## 📄 License & Terms
+## License & Terms
 
-[![CC BY-NC 4.0](https://shields.io)](https://creativecommons.org)
+This work is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 
-This repository is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License](https://creativecommons.org). 
-
-* **Attribution:** You are free to copy, distribute, and modify these AI prompts, provided you give appropriate credit to the original author.
-* **Non-Commercial:** You may **not** use these instructions or derivative prompts for commercial security services, paid AI tools, or monetized enterprise platforms without explicit permission.
-* **Disclaimer:** These prompts are diagnostic instructions for AI models. AI outputs can vary or hallucinate; execute at your own risk.
+- **Use freely.** You may copy, adapt, and use this checklist and its prompts, including in commercial and professional work, as long as you credit the original (phybuilds/CheckMacRisky).
+- **No warranty.** This is a diagnostic checklist for AI assistants and humans. AI output can vary or be wrong. Verify every version against the vendor advisory and use at your own risk.
