@@ -4,7 +4,7 @@ An easy, step-by-step checklist for checking a Mac after the October 2026 securi
 
 This guide is designed to be handed to an AI assistant. The assistant must inspect first, explain what it finds in plain language, and obtain approval before making each individual change.
 
-> Last reviewed: **26 October 2026**
+> Last reviewed: **27 October 2026**
 >
 > Security versions change. Before recommending a fix, the assistant must confirm the current fixed version in the linked vendor advisory. It must not assume this README is still current.
 
