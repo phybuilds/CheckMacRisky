@@ -4,11 +4,54 @@ An easy, step-by-step checklist for checking a Mac after the October 2026 securi
 
 This guide is designed to be handed to an AI assistant. The assistant must inspect first, explain what it finds in plain language, and obtain approval before making each individual change.
 
-> Last reviewed: **27 October 2026**
+> Last reviewed: **9 November 2026**
 >
 > Security versions change. Before recommending a fix, the assistant must confirm the current fixed version in the linked vendor advisory. It must not assume this README is still current.
 
 ## Quick start
+
+## Changes reviewed on 9 November 2026
+
+Review window: 27 October–9 November, plus updates released on 26 October after the previous review. This is a focused review of Mac development software, not a complete worldwide incident register. A vulnerability disclosure, evidence of exploitation, and a confirmed breach are different findings; do not describe one as another.
+
+| Development | Who should check | Next action |
+|---|---|---|
+| **Undici: six security fixes, 5 November** | Node projects using Undici directly or through dependencies; applications using its cache/redirect interceptors or integrity checks | Inspect every resolved copy. Fixed releases: **7.30.2** and **8.12.4** on their respective branches. Read each advisory's affected range; do not label every older major affected automatically. |
+| **Brotli: active exploitation reported, 30 October** | Applications decoding untrusted Brotli data, including embedded runtimes and cloud builds | Prioritise the existing Node/Brotli/Bun checks. This is new exploitation information about CVE-2026-111497, not a new vulnerability. |
+| **Apple security updates** | Macs, Safari users, and Xcode users | Apple's release index lists macOS **27.2, 26.7.2, 15.8.2**, Safari **27.2** (26 October), and Xcode **27.2** (29 October). Use the supported update for the installed OS branch and hardware. |
+
+Sources: [Undici 7.30.2](https://github.com/nodejs/undici/releases/tag/v7.30.2), [Undici 8.12.4](https://github.com/nodejs/undici/releases/tag/v8.12.4), [Singapore CSA alert dated 30 October](https://www.csa.gov.sg/alerts-and-advisories/alerts/al-2026-154/), [Apple release index](https://support.apple.com/en-us/100100).
+
+### New read-only check: Undici
+
+In each approved Node project, run:
+
+```sh
+npm ls undici --all
+node -p 'JSON.stringify({node:process.versions.node,undici:process.versions.undici || "not reported"})'
+```
+
+The first command checks npm-installed copies; the second identifies the copy embedded in Node, when reported. Updating the npm package does not replace Node's embedded implementation. Check Node's own release notes for the runtime fix; do not infer it from an npm version alone.
+
+The six advisories cover cache disclosure/poisoning, redirect credential handling, cache replay failures, and integrity verification. Applicability depends on the affected version and API use. Review the links in the vendor release notes before assigning a status.
+
+For Phase 2, update the existing compatible dependency branch (7.x to at least 7.30.2, 8.x to at least 8.12.4), or update the parent dependency when transitive. Review overrides individually, run tests/builds, and restart or redeploy affected consumers with separate approval. Do not force a major upgrade. Persistent caches may need vendor-directed invalidation; obtain approval before deleting any cache.
+
+### Additional Brotli coverage
+
+For approved Python environments, inspect package metadata without importing the decoders:
+
+```sh
+python -B -c 'import importlib.metadata as m; names={d.metadata["Name"].lower():d.version for d in m.distributions()}; print({n:names.get(n,"absent") for n in ("brotli","brotlicffi")})'
+```
+
+An updated Node command does not establish safety for Python packages, .NET, containers, or applications embedding their own decoder. If installed, verify each product's current vendor advisory and rebuild/restart the actual consumer. Do not install these packages merely to check them.
+
+### Current certificate-workaround status
+
+Apple's eMudhra advisory, rechecked on 9 November, still documents the optional command-line workaround. Do not infer from an OS update alone that every trust store is fixed. Verify the active bundle and relevant clients after updates.
+
+## Start here
 
 Give your AI assistant this README and the following prompt:
 
@@ -86,7 +129,7 @@ if [ -f "/Applications/Firefox.app/Contents/Info.plist" ]; then
 fi
 ```
 
-As of the review date:
+Historical October baseline (check the vendor updater for newer releases):
 
 - Chrome for Mac should be **156.0.8078.47 or later**.
 - Firefox Desktop should be **158.0.1 or later**.
@@ -202,7 +245,7 @@ This does not contact the internet:
 ```sh
 openssl crl2pkcs7 -nocrl -certfile /etc/ssl/cert.pem 2>/dev/null \
   | openssl pkcs7 -print_certs -noout 2>/dev/null \
-  | grep -E 'emSign ECC Root CA - G3|AAA Certificate Services' || true
+  | grep -E 'emSign ECC Root CA - G3|AAA Certificate Services'
 ```
 
 Interpretation:
@@ -210,6 +253,8 @@ Interpretation:
 - No output: neither root is in this command-line trust bundle.
 - One or two names: command-line clients may still trust at least one affected chain.
 - An OpenSSL error: **UNKNOWN**; do not edit the file.
+
+The assistant must check both OpenSSL commands' exit status separately (or use a shell with `pipefail`). Do not suppress parsing errors or treat a failed pipeline as proof that roots are absent. `grep` exit 1 alone means no matching names; a certificate-parser failure means UNKNOWN.
 
 ### Optional live probe
 
